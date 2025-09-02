@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成就系统 - 隐藏的真相</title>
+    <link rel="stylesheet" href="../main.css">
+    <link rel="stylesheet" href="achievements.css">
+    <link rel="icon" href="..//favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="achievement-bg"></div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="main-title">成就卷宗</h1>
+            <p class="main-subtitle">你的侦探历程与荣誉</p>
+        </header>
+        
+        <section>
+            <div class="carousel-container">
+                <button class="carousel-btn" id="carouselPrev" aria-label="上一页">
+                    <span>&#8592;</span>
+                </button>
+                
+                <div class="achievement-list" id="achievementList">
+                    <!-- 成就项将通过JavaScript动态生成 -->
+                </div>
+                
+                <button class="carousel-btn" id="carouselNext" aria-label="下一页">
+                    <span>&#8594;</span>
+                </button>
+            </div>
+        </section>
+        
+        <button class="menu-btn" style="margin-top: 2rem;" onclick="window.location.href='../index/index.html'">
+            返回主界面
+        </button>
+    </div>
+
+    <script src="achievement.js"></script>
+</body>
+</html>

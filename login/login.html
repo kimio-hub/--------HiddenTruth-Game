@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隐藏的真相 - 身份验证</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 背景效果 -->
+    <div class="bg-wrapper">
+        <div class="bg-img"></div>
+        <div class="spotlight"></div>
+        <div class="noise-overlay"></div>
+        
+    </div>
+
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="title-area">
+            <h1 class="glitch-text" data-text="隐藏的真相">隐藏的真相</h1>
+            <p class="subtitle">你相信记忆吗？</p>
+            <div class="title-decoration"></div>
+        </div>
+
+        <!-- 登录表单 -->
+        <div class="form-wrapper">
+            <div class="form-card" id="loginForm">
+                <div class="card-inner">
+                    <div class="card-header">
+                        <i class="fa fa-folder-open-o"></i>
+                        <h2>档案室访问</h2>
+                    </div>
+                    <div class="form-content">
+                        <div class="input-group">
+                            <span class="input-icon"><i class="fa fa-user-secret"></i></span>
+                            <div class="input-wrapper">
+                               <input type="text" id="regUsername" placeholder="创建侦探代号" required autocomplete="off">
+                                <div class="input-line"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon"><i class="fa fa-key"></i></span>
+                            <div class="input-wrapper">
+                                <input type="password" id="loginPassword" placeholder="密钥" required>
+                                <button type="button" class="toggle-password" data-target="loginPassword">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                                <div class="input-line"></div>
+                            </div>
+                        </div>
+                        <button type="button" id="loginBtn" class="main-btn">
+                            <i class="fa fa-unlock-alt"></i>
+                            <span>进入案件现场</span>
+                        </button>
+                        <p class="form-tip">
+                            首次来访？<a href="#" id="toRegister" class="link-effect">注册身份</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="card-decoration">
+                    <div class="scan-line"></div>
+                    <div class="corner-decoration top-left"></div>
+                    <div class="corner-decoration top-right"></div>
+                    <div class="corner-decoration bottom-left"></div>
+                    <div class="corner-decoration bottom-right"></div>
+                </div>
+            </div>
+
+            <!-- 注册表单 -->
+            <div class="form-card hidden" id="registerForm">
+                <div class="card-inner">
+                    <div class="card-header">
+                        <i class="fa fa-file-text-o"></i>
+                        <h2>身份档案创建</h2>
+                    </div>
+                    <div class="form-content">
+                        <div class="input-group">
+                            <span class="input-icon"><i class="fa fa-user-plus"></i></span>
+                            <div class="input-wrapper">
+                                <input type="text" id="loginUsername" placeholder="创建侦探代号" required autocomplete="off">
+                                <div class="input-line"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon"><i class="fa fa-lock"></i></span>
+                            <div class="input-wrapper">
+                                <input type="password" id="regPassword" placeholder="设置密钥 (至少6位)" required>
+                                <button type="button" class="toggle-password" data-target="regPassword">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                                <div class="input-line"></div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon"><i class="fa fa-check-circle"></i></span>
+                            <div class="input-wrapper">
+                                <input type="password" id="regConfirmPassword" placeholder="确认密钥" required>
+                                <button type="button" class="toggle-password" data-target="regConfirmPassword">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                                <div class="input-line"></div>
+                            </div>
+                        </div>
+                        <button type="button" id="registerBtn" class="main-btn">
+                           <i class="fa fa-paper-plane"></i>
+                           <span>提交档案</span>
+                         </button>
+                        <p class="form-tip">
+                            已有档案？<a href="#" id="toLogin" class="link-effect">返回登录</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="card-decoration">
+                    <div class="scan-line"></div>
+                    <div class="corner-decoration top-left"></div>
+                    <div class="corner-decoration top-right"></div>
+                    <div class="corner-decoration bottom-left"></div>
+                    <div class="corner-decoration bottom-right"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通知提示 -->
+        <div id="notification" class="notification hidden">
+            <i id="notificationIcon"></i>
+            <span id="notificationText"></span>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 全局样式 */
+body {
+     background: url('夏目.jpg') center/cover no-repeat;
+    color: #ff0000;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 头部样式 */
+header {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 30px;
+     background-color: #f5f7fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(31, 4, 235, 0.983);
+}
+
+.profile-pic img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #4a90e2;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 1.2rem;
+    color: #4a90e2;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.tagline {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* 通用章节样式 */
+section {
+   background-color: #f5f7fa;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a90e2;
+    display: flex;
+    align-items: center;
+}
+
+section h2 i {
+    margin-right: 10px;
+    color: #4a90e2;
+}
+
+
+.about p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+
+
+.contact ul {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.contact li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.contact li i {
+    color: #4a90e2;
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+
+/* 页脚样式 */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+.back-button {
+    margin: 0;
+    color: #74dbed;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 500;
+}
+

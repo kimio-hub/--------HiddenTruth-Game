@@ -1,0 +1,272 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+    color: #e0e0e0;
+    background: #1a1a2e;
+    min-height: 100vh;
+}
+.bg-img {
+    background: url('../assets/image/0001.jpg') center/cover no-repeat;
+    position: fixed;
+    inset: 0;
+    filter: brightness(3) contrast(1);
+    z-index: 0;
+}
+.spotlight {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 100px, rgba(0,0,0,0.85) 150px);
+    pointer-events: none;
+    z-index: 1;
+}
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+.title-area {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.title-area h1 {
+    font-size: 3.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(233,69,96,0.5);
+    position: relative;
+    animation: glitchText 3s infinite;
+    font-family: 'Georgia', serif;
+}
+.subtitle {
+    color: #e94560;
+    font-size: 1.1rem;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+@keyframes glitchText {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(2deg); filter: blur(0.5px); }
+    21% { transform: skew(-1deg); filter: blur(0); }
+    100% { transform: skew(0deg); }
+}
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.form-card {
+    background: rgba(22,33,62,0.95);
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 2.5rem;
+    width: 380px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(233,69,96,0.1);
+    backdrop-filter: blur(10px);
+    margin: 0 auto;
+    transition: opacity 0.3s, transform 0.3s;
+}
+.form-content {
+    text-align: center;
+}
+.card-inner {
+    position: relative;
+    z-index: 2;
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+.card-header i {
+    color: #e94560;
+    font-size: 1.5rem;
+}
+.card-header h2 {
+    color: #e94560;
+    font-size: 1.5rem;
+    font-family: 'Georgia', serif;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(233,69,96,0.3);
+    margin: 0;
+}
+.input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+.input-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e94560;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+.input-wrapper {
+    position: relative;
+}
+.form-card input {
+    width: 100%;
+    padding: 0.8rem 2rem 0.8rem 2.5rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    outline: none;
+    border-radius: 0.5rem;
+}
+.input-line {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #e94560 0%, transparent 100%);
+    transform-origin: left;
+    transform: scaleX(0.8);
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+.form-card input:focus + .input-line {
+    transform: scaleX(1);
+}
+.toggle-password {
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #e94560;
+    cursor: pointer;
+    font-size: 1.1rem;
+    z-index: 3;
+}
+.main-btn {
+    display: inline-block;
+    margin: 2rem auto 0 auto;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(90deg, #e94560 0%, #1a1a2e 100%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 2rem;
+    box-shadow: 0 6px 24px rgba(233,69,96,0.18);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+}
+.main-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+}
+.main-btn:hover {
+    background: linear-gradient(90deg, #e94560 60%, #fbb1b1 100%);
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(233,69,96,0.25);
+}
+.main-btn:hover::before {
+    transform: translate(-50%, -50%) scale(2);
+}
+.form-tip {
+    text-align: center;
+    color: #888;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+}
+.form-tip a {
+    color: #e94560;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    position: relative;
+}
+.form-tip a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #e94560;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+.form-tip a:hover::after {
+    transform: scaleX(1);
+}
+.card-decoration {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.decoration-line {
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 45%, rgba(233,69,96,0.1) 50%, transparent 55%);
+    animation: shine 3s infinite;
+}
+.decoration-circle {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(233,69,96,0.1);
+    border-radius: 50%;
+}
+@keyframes shine {
+    0% {
+        transform: translateX(-50%) translateY(-50%) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-50%) translateY(-50%) rotate(360deg);
+    }
+}
+.notification {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(22,33,62,0.95);
+    padding: 1rem 2rem;
+    border-radius: 0.8rem;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(233,69,96,0.1);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.hidden {
+    display: none !important;
+}

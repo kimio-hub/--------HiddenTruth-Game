@@ -1,0 +1,47 @@
+{
+  "updated": "2025-09-02",
+  "pages": [
+    { "title": "根导航", "path": "index.html" },
+    { "title": "项目首页", "path": "index/index.html" },
+    { "title": "项目介绍", "path": "intro/intro.html" },
+    { "title": "登录", "path": "login/login.html" },
+    { "title": "游戏", "path": "game/game.html" },
+    { "title": "成就", "path": "achievement/achievement.html" },
+    { "title": "数据", "path": "data/data.html" },
+    { "title": "团队总览", "path": "team/team.html" },
+    { "title": "成员 · dzj", "path": "team/dzj/index.html" },
+    { "title": "成员 · hyq", "path": "team/hyq/index.html" },
+    { "title": "hyq · 相册", "path": "team/hyq/gallery.html" },
+    { "title": "成员 · wfy", "path": "team/wfy/index.html" },
+    { "title": "成员 · zhr", "path": "team/zhr/index.html" },
+    { "title": "成员 · zjh", "path": "team/zjh/index.html" }
+  ],
+  "assets": {
+    "images": [
+      "assets/image/0001.jpg",
+      "assets/image/0002.jpg",
+      "assets/image/0003.jpg",
+      "assets/image/0004.jpg",
+      "assets/image/0005.jpg",
+      "assets/image/0006.jpg",
+      "assets/image/0007.jpg",
+      "assets/image/0008.jpg",
+      "assets/image/0010.jpg",
+      "assets/image/0011.jpg",
+      "assets/image/0012.jpg",
+      "assets/image/0013.jpg",
+      "assets/image/0014.jpg",
+      "assets/image/0015.jpg",
+      "assets/image/0016.jpg",
+      "assets/image/0017.jpg",
+      "assets/image/dzj.jpg",
+      "assets/image/hyj.jpg",
+      "assets/image/wfy.jpg",
+      "assets/image/zhr.jpg",
+      "assets/image/zjh.jpg"
+    ],
+    "audio": [
+      "sound/music1.m4a"
+    ]
+  }
+}

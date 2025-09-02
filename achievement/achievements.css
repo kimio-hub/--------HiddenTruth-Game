@@ -1,0 +1,239 @@
+/* 基础样式重置与变量定义 */
+:root {
+  --primary-color: #e94560;
+  --primary-opacity: rgba(233, 69, 96, 0.18);
+  --text-light: #e0e0e0;
+  --text-white: #fff;
+  --border-image: url('../assets/image/0017.jpg');
+  --shadow: 0 4px 16px var(--primary-opacity);
+  --transition-speed: 0.6s;
+  --perspective: 1000px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-container {
+  padding-bottom: 100px;
+  min-height: 100vh;
+}
+
+/* 成就列表容器 */
+.achievement-list {
+  display: flex;
+  gap: 2rem;
+  padding: 0 1rem;
+  width: 100%;
+  transition: transform var(--transition-speed) ease;
+}
+
+/* 成就项样式 */
+.achievement-item {
+  width: 220px;
+  height: 280px;
+  flex: 0 0 220px;
+  perspective: var(--perspective);
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+.achievement-bg {
+    position: fixed;
+    inset: 0;
+    background: url('../assets/image/0008.jpg') center/cover no-repeat;
+    opacity: 0.35;
+    filter: blur(2px);
+    z-index: 0;
+}
+
+/* 翻转容器 */
+.achievement-flip {
+  width: 100%;
+  height: 100%;
+  transition: transform var(--transition-speed) cubic-bezier(.4, 2, .3, .7);
+  transform-style: preserve-3d;
+  position: relative;
+  transform-origin: 50% 50%;
+}
+
+.achievement-item.flipped .achievement-flip {
+  transform: rotateY(180deg);
+}
+
+/* 正反面通用样式 */
+.achievement-front,
+.achievement-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  backface-visibility: hidden;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 15px solid transparent;
+  border-image: var(--border-image) 30 stretch;
+  box-sizing: border-box;
+  padding: 1.5rem 1rem;
+}
+
+/* 背面样式 */
+.achievement-back {
+  transform: rotateY(180deg);
+}
+
+/* 装饰元素 */
+.achievement-front::before,
+.achievement-back::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 18px;
+  background: linear-gradient(90deg, var(--primary-color) 30%, transparent 100%);
+  
+}
+
+.achievement-front::after,
+.achievement-back::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 18px;
+  background: linear-gradient(270deg, var(--primary-color) 30%, transparent 100%);
+  
+}
+
+/* 图片样式 */
+.achievement-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 文本样式 */
+.achievement-title {
+  color: var(--primary-color);
+  font-size: 1.15rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-condition {
+  color: var(--text-white);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Georgia', serif;
+}
+
+.achievement-desc {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 标签样式 */
+.file-tag {
+  position: absolute;
+  top: 10px;
+  left: -10px;
+  background: var(--primary-color);
+  color: var(--text-white);
+  font-size: 0.85rem;
+  font-family: 'Georgia', serif;
+  padding: 2px 12px;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px var(--primary-opacity);
+  transform: rotate(-12deg);
+  letter-spacing: 3px;
+  opacity: 0.8;
+  z-index: 6;
+}
+
+/* 轮播容器 */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+/* 轮播按钮 */
+.carousel-btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--text-white);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-btn:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.carousel-btn#carouselPrev {
+  left: -0.3rem;
+}
+
+.carousel-btn#carouselNext {
+  right: -0.3rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .achievement-item {
+    width: 180px;
+    height: 240px;
+    flex: 0 0 180px;
+  }
+  
+  .achievement-title {
+    font-size: 1rem;
+  }
+  
+  .achievement-condition {
+    font-size: 0.9rem;
+  }
+  
+  .achievement-desc {
+    font-size: 0.85rem;
+  }
+  
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

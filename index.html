@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>站点导航 - 未来游戏研究所 HiddenTruth</title>
+  <link rel="icon" href="./favicon.ico" />
+  <link rel="stylesheet" href="./main.css" />
+  <style>
+    /* 辅助样式，若 main.css 已定义会覆盖/增强 */
+    :root { --fg:#222; --muted:#666; --link:#2a6; --card:#fff; --bg:#f6f7fb; }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans','PingFang SC','Microsoft YaHei','WenQuanYi Micro Hei','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji',sans-serif;}
+    .wrap{max-width:980px;margin:0 auto;padding:24px 16px 56px;}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+    header img{width:28px;height:28px;}
+    h1{font-size:22px;margin:0;}
+    .desc{color:var(--muted);margin:6px 0 18px;}
+    section{margin:18px 0;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+    .card{background:var(--card);border-radius:10px;padding:12px 14px;border:1px solid #e7e9ee;}
+    .card h3{margin:0 0 8px 0;font-size:16px;}
+    a{color:var(--link);text-decoration:none}
+    a:hover{text-decoration:underline}
+    footer{margin-top:28px;color:var(--muted);font-size:13px}
+    code{background:#eef1f6;border-radius:6px;padding:2px 6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="./favicon.ico" alt="logo" />
+      <h1>未来游戏研究所 · HiddenTruth · 导航</h1>
+    </header>
+    <p class="desc">从仓库根目录快速进入各页面。若直接双击打开页面，部分相对路径可能受浏览器限制，建议使用本地静态服务器预览。</p>
+
+    <section>
+      <h2>核心页面</h2>
+      <div class="grid">
+        <div class="card">
+          <h3><a href="./index/index.html">游戏主界面</a></h3>
+          <div>路径：<code>index/index.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./prologue/prologue.html">序章</a></h3>
+          <div>路径：<code>prologue/prologue.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./intro/intro.html">项目介绍</a></h3>
+          <div>路径：<code>intro/intro.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./login/login.html">登录</a></h3>
+          <div>路径：<code>login/login.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./game/game.html">游戏</a></h3>
+          <div>路径：<code>game/game.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./achievement/achievement.html">成就</a></h3>
+          <div>路径：<code>achievement/achievement.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./data/data.html">数据</a></h3>
+          <div>路径：<code>data/data.html</code></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>团队</h2>
+      <div class="grid">
+        <div class="card">
+          <h3><a href="./team/team.html">团队总览</a></h3>
+          <div>路径：<code>team/team.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/dzj/index.html">成员 · dzj</a></h3>
+          <div>路径：<code>team/dzj/index.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/hyq/index.html">成员 · hyq</a></h3>
+          <div>路径：<code>team/hyq/index.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/hyq/gallery.html">hyq · 相册</a></h3>
+          <div>路径：<code>team/hyq/gallery.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/wfy/index.html">成员 · wfy</a></h3>
+          <div>路径：<code>team/wfy/index.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/zhr/index.html">成员 · zhr</a></h3>
+          <div>路径：<code>team/zhr/index.html</code></div>
+        </div>
+        <div class="card">
+          <h3><a href="./team/zjh/index.html">成员 · zjh</a></h3>
+          <div>路径：<code>team/zjh/index.html</code></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>站点地图文件：<a href="./sitemap.json">sitemap.json</a></div>
+      <div>最后整理：2025-09-02</div>
+    </footer>
+  </div>
+</body>
+</html>

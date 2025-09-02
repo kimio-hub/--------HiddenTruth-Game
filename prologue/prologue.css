@@ -1,0 +1,138 @@
+/* 序章样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Microsoft YaHei', sans-serif;
+    background-color: #000;
+}
+
+#prologue-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    cursor: pointer;
+    /* 默认隐藏，防止在JS重定向前闪烁 */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background-color: #000;
+    background-image: url('../assets/image/dream.svg');
+    background-size: cover;
+    background-position: center;
+}
+
+.background-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+}
+
+.content-container {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+#prologue-content {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.prologue-text {
+    color: #fff;
+    font-size: 24px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.prologue-title {
+    color: #FFD700;
+    font-size: 42px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1.2s ease-out forwards;
+}
+
+.prompt {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 18px;
+    opacity: 0;
+    animation: pulse 2s infinite, fadeIn 1s ease-out 2s forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 0.7; 
+    }
+    50% { 
+        opacity: 1; 
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .prologue-title {
+        font-size: 32px;
+    }
+    
+    .prologue-text {
+        font-size: 18px;
+    }
+    
+    .prompt {
+        font-size: 16px;
+    }
+    
+    .content-container {
+        padding: 16px;
+    }
+}

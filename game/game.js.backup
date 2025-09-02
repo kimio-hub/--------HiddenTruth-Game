@@ -1,0 +1,377 @@
+// 基础引用
+const introScreen = document.getElementById('intro-screen');
+const bgm = document.getElementById('bgm');
+let bgmPlayed = false;
+
+// -------- State Store（极简） --------
+const Store = (() => {
+  const KEY = 'HTG_SAVE_V1';
+  const defaultState = {
+    phase: 'dream', // dream -> police-car -> dialogue -> investigation
+    currentRoom: 'entrance',
+    evidences: {}, // { evidenceId: true }
+    flags: {},     // 通用开关
+    meta: { version: 1, createdAt: Date.now(), updatedAt: Date.now() }
+  };
+
+  let state = null;
+  const subs = new Set();
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) throw new Error('no save');
+      const parsed = JSON.parse(raw);
+      state = { ...defaultState, ...parsed, meta: { ...defaultState.meta, ...parsed.meta, updatedAt: Date.now() } };
+    } catch {
+      state = { ...defaultState };
+    }
+  }
+
+  function save() {
+    state.meta.updatedAt = Date.now();
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+
+  function getState() { return JSON.parse(JSON.stringify(state)); }
+
+  function setState(patch) {
+    state = { ...state, ...patch };
+    save();
+    subs.forEach(fn => fn(getState()));
+  }
+
+  function update(fn) {
+    const next = fn(getState());
+    setState(next);
+  }
+
+  function subscribe(fn) { subs.add(fn); return () => subs.delete(fn); }
+
+  load();
+  return { getState, setState, update, subscribe };
+})();// -------- 场景管理（重构：支持房间系统） --------
+const SceneManager = (() => {
+  const backgroundImage = document.querySelector('.background-image');
+  const dialogueContainer = document.getElementById('dialogue-container');
+  const gameContainer = document.getElementById('game-container');
+  const roomNav = document.getElementById('room-nav');
+  const currentRoomEl = document.getElementById('current-room');
+  const roomExitsEl = document.getElementById('room-exits');
+
+  // 热点容器（懒创建）
+  let hotspotsLayer = null;
+  function ensureHotspotsLayer() {
+    if (!hotspotsLayer) {
+      hotspotsLayer = document.createElement('div');
+      hotspotsLayer.className = 'hotspots-layer';
+      gameContainer.appendChild(hotspotsLayer);
+    } else {
+      hotspotsLayer.innerHTML = '';
+    }
+    return hotspotsLayer;
+  }
+
+  function changeBackground(src) {
+    const temp = new Image();
+    temp.src = src;
+    temp.onload = () => {
+      backgroundImage.style.opacity = '0';
+      setTimeout(() => {
+        backgroundImage.src = src;
+        backgroundImage.style.opacity = '1';
+      }, 300);
+    };
+  }
+
+  // 房间连接关系
+  const ROOM_CONNECTIONS = {
+    'entrance': ['living-room'],
+    'living-room': ['entrance', 'kitchen', 'study', 'balcony', 'bedroom'],
+    'kitchen': ['living-room'],
+    'study': ['living-room'],
+    'balcony': ['living-room'],
+    'bedroom': ['living-room', 'bathroom'],
+    'bathroom': ['bedroom']
+  };
+
+  // 房间名称映射
+  const ROOM_NAMES = {
+    'entrance': '玄关',
+    'living-room': '客厅',
+    'kitchen': '厨房',
+    'study': '书房',
+    'balcony': '阳台',
+    'bedroom': '卧室',
+    'bathroom': '卫生间'
+  };
+
+  // 房间数据
+  const ROOMS = {
+    'entrance': {
+      bg: '../assets/image/entrance.jpg',
+      text: '这里是案发现场的玄关。看起来很普通...',
+      hotspots: []
+    },
+    'living-room': {
+      bg: '../assets/image/living-room.jpg',
+      text: '宽敞的客厅，这里应该发生过什么...',
+      hotspots: [
+        { id: 'sofa-clue', x: '40%', y: '60%', w: '20%', h: '15%',
+          onClick: () => {
+            Store.update(s => ({ ...s, evidences: { ...s.evidences, 'sofa-cushion': true } }));
+            showTip('获得线索：沙发上的痕迹');
+          }
+        }
+      ]
+    },
+    'kitchen': {
+      bg: '../assets/image/kitchen.jpg',
+      text: '厨房里弥漫着奇怪的味道...',
+      hotspots: []
+    },
+    'study': {
+      bg: '../assets/image/study.jpg',
+      text: '书房里的书籍散落一地...',
+      hotspots: []
+    },
+    'balcony': {
+      bg: '../assets/image/balcony.jpg',
+      text: '阳台上的花盆有些异常...',
+      hotspots: []
+    },
+    'bedroom': {
+      bg: '../assets/image/bedroom.jpg',
+      text: '卧室里一片凌乱...',
+      hotspots: []
+    },
+    'bathroom': {
+      bg: '../assets/image/bathroom.jpg',
+      text: '卫生间里有血迹...',
+      hotspots: [
+        { id: 'blood-trace', x: '30%', y: '70%', w: '15%', h: '10%',
+          onClick: () => {
+            Store.update(s => ({ ...s, evidences: { ...s.evidences, 'bathroom-blood': true } }));
+            showTip('获得线索：卫生间的血迹');
+          }
+        }
+      ]
+    }
+  };
+
+  function showTip(text) {
+    const tip = document.createElement('div');
+    tip.textContent = text;
+    tip.style.position = 'absolute';
+    tip.style.left = '50%';
+    tip.style.bottom = '120px';
+    tip.style.transform = 'translateX(-50%)';
+    tip.style.padding = '8px 12px';
+    tip.style.background = 'rgba(0,0,0,0.7)';
+    tip.style.color = '#fff';
+    tip.style.borderRadius = '8px';
+    tip.style.fontSize = '14px';
+    tip.style.zIndex = '20';
+    tip.style.opacity = '0';
+    tip.style.transition = 'opacity .2s, transform .2s';
+    document.body.appendChild(tip);
+    requestAnimationFrame(() => {
+      tip.style.opacity = '1';
+      tip.style.transform = 'translate(-50%, -6px)';
+    });
+    setTimeout(() => {
+      tip.style.opacity = '0';
+      tip.style.transform = 'translate(-50%, 0)';
+      setTimeout(() => tip.remove(), 220);
+    }, 1400);
+  }
+
+  function goToRoom(roomId) {
+    Store.update(s => ({ ...s, currentRoom: roomId }));
+    renderRoom(roomId);
+  }
+
+  function renderRoom(roomId) {
+    const room = ROOMS[roomId];
+    if (!room) return;
+    
+    changeBackground(room.bg);
+    dialogueContainer.style.opacity = '1';
+    dialogueContainer.textContent = room.text || '';
+    
+    // 更新房间导航
+    currentRoomEl.textContent = `当前位置：${ROOM_NAMES[roomId]}`;
+    roomExitsEl.innerHTML = '';
+    
+    const exits = ROOM_CONNECTIONS[roomId] || [];
+    exits.forEach(exitId => {
+      const btn = document.createElement('button');
+      btn.className = 'exit-btn';
+      btn.textContent = `前往 ${ROOM_NAMES[exitId]}`;
+      btn.addEventListener('click', () => goToRoom(exitId));
+      roomExitsEl.appendChild(btn);
+    });
+    
+    // 渲染热点
+    const layer = ensureHotspotsLayer();
+    layer.innerHTML = '';
+    (room.hotspots || []).forEach(h => {
+      const el = document.createElement('div');
+      el.className = 'hotspot';
+      el.style.left = h.x; el.style.top = h.y; el.style.width = h.w; el.style.height = h.h;
+      el.addEventListener('click', h.onClick);
+      layer.appendChild(el);
+    });
+    
+    // 显示房间导航
+    roomNav.style.display = 'block';
+  }
+
+  function renderPhase(phase) {
+    roomNav.style.display = 'none'; // 先隐藏房间导航
+    
+    switch(phase) {
+      case 'investigation':
+        const state = Store.getState();
+        renderRoom(state.currentRoom);
+        break;
+      default:
+        // 其他阶段暂时不处理房间
+        break;
+    }
+  }
+
+  return { renderRoom, renderPhase, changeBackground };
+})();
+
+function enterPrologue() {
+    introScreen.style.opacity = '0';
+    setTimeout(() => {
+        introScreen.style.zIndex = '-1';
+    }, 800);
+
+    if (!bgmPlayed && bgm) {
+        bgm.play().catch(() => {
+            bgm.play();
+        });
+        bgmPlayed = true;
+    }
+
+    initPrologue();
+}
+
+function initPrologue() {
+    const dialogues = [
+        "黑暗的房间里，颤抖的双手紧握着沾血的刀",
+        "女人：“——”",
+        "随着最后一刀捅下去，倒在地上的女人终于不再发出声音了。",
+        "接下来只要处理好自己留下的痕迹——",
+        "“咔”",
+        "房间的某处传来了声响。"
+    ];
+    let currentIndex = 0;
+    const backgroundImage = document.querySelector('.background-image');
+    const dialogueContainer = document.getElementById('dialogue-container');
+    const prompt = document.getElementById('prompt');
+    const blackout = document.getElementById('blackout');
+    const gameContainer = document.getElementById('game-container');
+    const backgroundImages = {
+        p1: "../assets/image/0014.jpg",
+        p2: "../assets/image/0014.jpg",
+        p3: "../assets/image/0015.jpg"
+    };
+
+    function showCurrentDialogue() {
+        dialogueContainer.innerHTML = '';
+        const dialogueElement = document.createElement('div');
+        dialogueElement.className = 'text-white text-lg md:text-xl lg:text-2xl font-serif text-shadow fade-in';
+        dialogueElement.textContent = dialogues[currentIndex];
+        dialogueContainer.appendChild(dialogueElement);
+
+        if (currentIndex === 2) {
+            changeBackground(backgroundImages.p2);
+        }
+        if (currentIndex === 4) {
+            changeBackground(backgroundImages.p3);
+        }
+
+        updatePromptVisibility();
+    }
+function changeBackground(src) {
+    const tempImg = new Image();
+    tempImg.src = src;
+    tempImg.onload = () => {   
+        backgroundImage.style.opacity = "0";   
+        setTimeout(() => {
+            backgroundImage.src = src; 
+            backgroundImage.style.opacity = "1"; 
+        }, 300); 
+    };
+}
+
+    function updatePromptVisibility() {
+        if (currentIndex === 0 || currentIndex === 1 || currentIndex === 2) {
+            setTimeout(() => {
+                prompt.style.opacity = '1';
+                prompt.style.display = 'block';
+            }, 500);
+        } else {
+            prompt.style.opacity = '0';
+            setTimeout(() => {
+                prompt.style.display = 'none';
+            }, 300);
+        }
+    }
+
+        function nextDialogue() {
+        if (prompt) {
+            prompt.style.opacity = '0';
+        }
+
+        if (currentIndex < dialogues.length - 1) {
+            currentIndex++;
+            setTimeout(showCurrentDialogue, 300);
+        } else {
+            setTimeout(() => {
+                dialogueContainer.style.opacity = '0';
+                setTimeout(() => {
+                    blackout.style.opacity = '1';
+                    blackout.style.pointerEvents = 'auto';
+                                        // 结束序章，进入第一场景
+                                        setTimeout(() => {
+                                            blackout.style.opacity = '0';
+                                            blackout.style.pointerEvents = 'none';
+                                            dialogueContainer.style.opacity = '1';
+                                            // 渲染场景
+                                            const s = Store.getState();
+                                            SceneManager.render(s.sceneId);
+                                        }, 700);
+                }, 500);
+            }, 1000);
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        e.preventDefault();
+        nextDialogue();
+    }, { passive: false });
+    gameContainer.addEventListener('click', nextDialogue);
+    document.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        nextDialogue();
+    }, { passive: false });
+
+    backgroundImage.src = backgroundImages.p1;
+    const img = document.querySelector('img');
+    if (img.complete) {
+        showCurrentDialogue();
+    } else {
+        img.addEventListener('load', showCurrentDialogue);
+    }
+}
+
+introScreen.addEventListener('click', enterPrologue);
+document.addEventListener('keydown', (e) => {
+    e.preventDefault();
+    enterPrologue();
+}, { once: true });

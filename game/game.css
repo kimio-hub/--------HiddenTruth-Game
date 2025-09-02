@@ -1,0 +1,841 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 工具类 */
+.text-shadow {
+    text-shadow: 0 0 8px rgba(1, 1, 7, 0.8);
+}
+
+.text-shadow-sm {
+    text-shadow: 0 0 4px rgba(240, 5, 5, 0.6);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.bg-blur {
+    backdrop-filter: blur(4px);
+}
+
+/* 动画定义 */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* 游戏容器样式 */
+#game-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background-color: #000;
+}
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(100%);
+    transition: opacity 300ms ease-in-out; 
+}
+.intro-prompt{
+    color: rgba(226, 29, 29, 0.7);
+    font-size: 25px;
+    margin-top: 16px;
+    opacity: 0;
+    animation: pulse 2s infinite;
+}
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 对话容器样式 */
+#dialogue-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 15px 30px;
+    margin-bottom: 64px;
+    text-align: center;
+    transition: opacity 500ms;
+    background: rgba(0, 0, 0, 0.85);
+    color: #FFD700;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    letter-spacing: 1px;
+}
+
+#dialogue-container > div {
+    margin: 0 auto;
+    max-width: 80%;
+}
+
+/* 提示文字样式 */
+#prompt {
+    color: rgba(226, 29, 29, 0.7);
+    font-size: 13px;
+    margin-top: 16px;
+    opacity: 0;
+    animation: pulse 2s infinite;
+}
+
+/* 热点层：可点击区域用于收集线索/触发事件 */
+.hotspots-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+}
+.hotspot {
+    position: absolute;
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 120ms, border-color 120ms;
+}
+.hotspot:hover {
+    border-color: rgba(255,255,255,0.35);
+    background-color: rgba(255,255,255,0.06);
+}
+
+/* 交互点样式 */
+.interactable {
+    position: absolute;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    border-radius: 8px;
+    background: rgba(255, 215, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 6;
+}
+
+.interactable.door {
+    border-color: rgba(0, 255, 127, 0.6);
+    background: rgba(0, 255, 127, 0.18);
+    position: relative;
+}
+
+.interactable.door::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 72px;
+    background: url('../assets/image/door.svg') no-repeat center center;
+    background-size: contain;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.interactable.door:hover::before {
+    opacity: 1;
+}
+
+/* 门目标标签（常显） */
+.interactable.door::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    bottom: -24px; /* 标签显示在门区域下方，避免被顶部遮挡 */
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.interactable.door.active::after {
+    background: rgba(0, 128, 64, 0.85);
+    border-color: rgba(0, 255, 127, 0.85);
+}
+
+.interactable.item {
+    border-color: rgba(255, 165, 0, 0.6);
+    background: rgba(255, 165, 0, 0.1);
+}
+
+.interactable.active {
+    border-width: 3px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    animation: pulse-glow 1.5s infinite;
+}
+
+.interactable.door.active {
+    border-color: rgba(0, 255, 127, 0.8);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.4);
+}
+
+.interactable.item.active {
+    border-color: rgba(255, 165, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+/* 交互提示 */
+.interaction-prompt {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+    z-index: 20;
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    animation: bounce-in 0.3s ease-out;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+}
+
+@keyframes bounce-in {
+    0% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* 对话框样式 */
+.dialogue-box {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    display: none;
+    z-index: 25;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dialogue-box .speaker {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.dialogue-box .text {
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.dialogue-box .continue-hint {
+    text-align: right;
+    color: #888;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* 黑幕样式 */
+#blackout {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+   background-color: rgb(0, 0, 0);
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1500ms;
+}
+
+/* 设置按钮 */
+#settings-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+#settings-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* 设置菜单 */
+#settings-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.settings-content {
+    background: rgba(20, 20, 20, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    animation: bounce-in 0.4s ease-out;
+}
+
+.settings-content h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #FFD700;
+}
+
+.settings-content button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 15px 0;
+    background: rgba(255, 215, 0, 0.8);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 200px;
+}
+
+.settings-content button:hover {
+    background: #FFD700;
+    transform: scale(1.05);
+}
+
+#close-settings-btn {
+    background: rgba(100, 100, 100, 0.7);
+    color: #fff;
+}
+
+#close-settings-btn:hover {
+    background: rgba(120, 120, 120, 0.9);
+}
+
+/* 存档读档界面样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 105;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+.save-load-content {
+    background: rgba(15, 15, 15, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    color: #fff;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: bounce-in 0.4s ease-out;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.save-load-content h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.slots-list {
+    margin-bottom: 20px;
+}
+
+.save-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+
+.save-slot:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.save-slot.empty {
+    border-style: dashed;
+    opacity: 0.7;
+    background: rgba(40, 40, 40, 0.3);
+}
+
+.slot-info {
+    flex: 1;
+}
+
+.slot-info h4 {
+    color: #FFD700;
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+.slot-info .slot-time {
+    color: #aaa;
+    font-size: 13px;
+    margin: 2px 0;
+}
+
+.slot-info .slot-location {
+    color: #ddd;
+    font-size: 14px;
+    margin: 2px 0;
+}
+
+.slot-info .slot-progress {
+    color: #bbb;
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.slot-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.slot-actions button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    min-width: 60px;
+}
+
+.save-here-btn {
+    background: rgba(0, 150, 0, 0.8);
+    color: #fff;
+}
+
+.save-here-btn:hover {
+    background: rgba(0, 180, 0, 1);
+    transform: scale(1.05);
+}
+
+.load-btn {
+    background: rgba(0, 120, 200, 0.8);
+    color: #fff;
+}
+
+.load-btn:hover {
+    background: rgba(0, 150, 255, 1);
+    transform: scale(1.05);
+}
+
+.overwrite-btn {
+    background: rgba(255, 150, 0, 0.8);
+    color: #fff;
+}
+
+.overwrite-btn:hover {
+    background: rgba(255, 180, 0, 1);
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background: rgba(200, 50, 50, 0.8);
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background: rgba(255, 70, 70, 1);
+    transform: scale(1.05);
+}
+
+.menu-actions {
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.menu-actions .close-btn {
+    background: rgba(100, 100, 100, 0.7);
+    color: #fff;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.menu-actions .close-btn:hover {
+    background: rgba(130, 130, 130, 0.9);
+    transform: scale(1.05);
+}
+
+/* 响应式调整 */
+@media (min-width: 768px) {
+    .content-container {
+        padding: 48px;
+    }
+    
+    #dialogue-container {
+        margin-bottom: 96px;
+    }
+    
+    #prompt {
+        font-size: 16px;
+    }
+}
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(100%);
+    transition: opacity 300ms ease-in-out; 
+}
+.intro-prompt{
+    color: rgba(226, 29, 29, 0.7);
+    font-size: 25px;
+    margin-top: 16px;
+    opacity: 0;
+    animation: pulse 2s infinite;
+}
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 玩家角色样式 */
+#player-character {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    z-index: 10;
+    transition: all 0.15s ease-out;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* 默认隐藏，调查阶段才显示 */
+}
+
+.player-sprite {
+    width: 100%;
+    height: 100%;
+    background: url('../assets/image/player-sprite.svg') no-repeat center center;
+    background-size: contain;
+    position: relative;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* 移动状态动画 */
+#player-character.moving {
+    transition: all 0.1s linear;
+}
+
+#player-character.moving .player-sprite {
+    animation: walk 0.4s infinite;
+}
+
+@keyframes walk {
+    0%, 100% { transform: scale(1, 1) rotate(0deg); }
+    25% { transform: scale(1.05, 0.95) rotate(-1deg); }
+    75% { transform: scale(1.05, 0.95) rotate(1deg); }
+}
+
+/* 道具栏样式 */
+#inventory-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    border-radius: 12px;
+    z-index: 90;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    display: none; /* 默认隐藏，调查阶段才显示 */
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.inventory-header span {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#toggle-inventory {
+    background: none;
+    border: none;
+    color: #FFD700;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+#toggle-inventory:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.inventory-slots {
+    display: flex;
+    gap: 8px;
+    padding: 12px 15px;
+    flex-wrap: wrap;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.inventory-slot {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.inventory-slot:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #FFD700;
+    transform: scale(1.05);
+}
+
+.inventory-slot .item-icon {
+    font-size: 24px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+.inventory-slot .item-name {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.inventory-slot:hover .item-name {
+    opacity: 1;
+}
+
+/* 道具详情弹窗 */
+#item-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 102;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.item-detail-content {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    text-align: center;
+    color: #fff;
+    max-width: 400px;
+    position: relative;
+    animation: bounce-in 0.4s ease-out;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 0, 0, 0.3);
+}
+
+.item-detail-content .item-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.item-detail-content h3 {
+    color: #FFD700;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.item-detail-content p {
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #ddd;
+}
+
+#item-detail-obtained {
+    font-size: 12px;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* 收起状态的道具栏 */
+#inventory-panel.collapsed .inventory-slots {
+    display: none;
+}
+
+#inventory-panel.collapsed {
+    bottom: 20px;
+    left: auto;
+    right: 20px;
+    width: auto;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#inventory-panel.collapsed .inventory-header {
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 10px;
+    border-bottom: none;
+    padding: 8px 12px;
+}

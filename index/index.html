@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隐藏的真相 - 游戏主界面</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="..//favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-bg"></div>
+    <div class="main-container">
+        <header class="main-header">
+            <h1 class="main-title">隐藏的真相</h1>
+            <p class="main-subtitle">侦探的世界，真相只属于有准备的人</p>
+        </header>
+        <nav class="main-menu">
+            <button class="menu-btn" id="newGameBtn">
+                <i class="fa fa-play-circle"></i> 新游戏
+            </button>
+            
+            <button class="menu-btn" id="continueBtn">
+                <i class="fa fa-folder-open"></i> 存档管理
+            </button>
+            
+            <button class="menu-btn" id="prologueBtn" style="display: none;">
+                <i class="fa fa-book"></i> 重看序章
+            </button>
+            
+            <button class="menu-btn" id="achievementBtn">
+                <i class="fa fa-trophy"></i> 成就系统
+            </button>
+            <button class="menu-btn" id="teamBtn">
+                <i class="fa fa-users"></i> 小组介绍
+            </button>
+        </nav>
+        
+        <!-- 存档管理界面 -->
+        <div id="save-manager" class="save-manager-overlay" style="display: none;">
+            <div class="save-manager-content">
+                <h2>存档管理</h2>
+                <div id="main-save-slots" class="main-slots-list">
+                    <!-- 存档槽将通过 JavaScript 动态生成 -->
+                </div>
+                <div class="manager-actions">
+                    <button id="close-save-manager" class="close-manager-btn">返回主菜单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 存档管理系统（简化版）
+        const MainSaveManager = {
+            SAVE_SLOTS_KEY: 'HTG_SAVE_SLOTS_V1',
+            ROOM_NAMES: {
+                'entrance': '玄关',
+                'living-room': '客厅', 
+                'kitchen': '厨房',
+                'study': '书房',
+                'bedroom': '卧室',
+                'balcony': '阳台',
+                'bathroom': '卫生间'
+            },
+
+            getSaveSlots() {
+                try {
+                    const raw = localStorage.getItem(this.SAVE_SLOTS_KEY);
+                    return raw ? JSON.parse(raw) : {};
+                } catch {
+                    return {};
+                }
+            },
+
+            getAllSlotData() {
+                const allSlots = this.getSaveSlots();
+                const result = [];
+                
+                for (let i = 1; i <= 5; i++) {
+                    const slotId = `slot_${i}`;
+                    const saveData = allSlots[slotId];
+                    result.push({
+                        slotId,
+                        isEmpty: !saveData,
+                        data: saveData || null
+                    });
+                }
+                
+                return result;
+            },
+
+            deleteSlot(slotId) {
+                const allSlots = this.getSaveSlots();
+                const saveData = allSlots[slotId];
+                
+                if (!saveData) return false;
+                
+                if (confirm(`确定要删除存档"${saveData.name}"吗？此操作不可恢复。`)) {
+                    delete allSlots[slotId];
+                    localStorage.setItem(this.SAVE_SLOTS_KEY, JSON.stringify(allSlots));
+                    return true;
+                }
+                return false;
+            },
+
+            renderMainSaveSlot(slotData) {
+                const { slotId, isEmpty, data } = slotData;
+                const slotNumber = slotId.split('_')[1];
+                
+                if (isEmpty) {
+                    return `
+                        <div class="main-save-slot empty" data-slot-id="${slotId}">
+                            <div class="main-slot-info">
+                                <h4>存档槽 ${slotNumber}</h4>
+                                <div class="main-slot-time">空存档位</div>
+                            </div>
+                            <div class="main-slot-actions">
+                                <button disabled style="opacity: 0.5; cursor: not-allowed;">无存档</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="main-save-slot" data-slot-id="${slotId}">
+                            <div class="main-slot-info">
+                                <h4>${data.name}</h4>
+                                <div class="main-slot-time">${data.timestamp}</div>
+                                <div class="main-slot-location">位置：${data.roomName}</div>
+                                <div class="main-slot-progress">${data.progress}</div>
+                            </div>
+                            <div class="main-slot-actions">
+                                <button class="main-continue-btn" data-action="continue" data-slot-id="${slotId}">继续游戏</button>
+                                <button class="main-delete-btn" data-action="delete" data-slot-id="${slotId}">删除</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+
+            showSaveManager() {
+                const allSlots = this.getAllSlotData();
+                const slotsList = document.getElementById('main-save-slots');
+                slotsList.innerHTML = allSlots.map(slot => this.renderMainSaveSlot(slot)).join('');
+                
+                document.getElementById('save-manager').style.display = 'flex';
+                
+                // 添加事件监听
+                slotsList.addEventListener('click', this.handleSlotClick.bind(this));
+            },
+
+            hideSaveManager() {
+                document.getElementById('save-manager').style.display = 'none';
+                const slotsList = document.getElementById('main-save-slots');
+                slotsList.removeEventListener('click', this.handleSlotClick.bind(this));
+            },
+
+            handleSlotClick(e) {
+                const button = e.target.closest('button[data-action]');
+                if (!button) return;
+                
+                const action = button.dataset.action;
+                const slotId = button.dataset.slotId;
+                
+                switch (action) {
+                    case 'continue':
+                        // 直接跳转到游戏，游戏会自动加载存档
+                        window.location.href = `../game/game.html?loadSlot=${slotId}`;
+                        break;
+                    case 'delete':
+                        if (this.deleteSlot(slotId)) {
+                            this.showSaveManager(); // 刷新列表
+                        }
+                        break;
+                }
+            }
+        };
+
+        // 页面加载时检查序章状态
+        document.addEventListener('DOMContentLoaded', function() {
+            const prologueCompleted = localStorage.getItem('HTG_PROLOGUE_COMPLETED');
+            if (prologueCompleted === 'true') {
+                // 如果已完成序章，显示"重看序章"按钮
+                document.getElementById('prologueBtn').style.display = 'block';
+            }
+        });
+        
+        document.getElementById('newGameBtn').onclick = function() {
+            // 检查是否已完成序章
+            const prologueCompleted = localStorage.getItem('HTG_PROLOGUE_COMPLETED');
+            if (prologueCompleted === 'true') {
+                // 已完成序章，重置游戏数据并直接进入游戏
+                localStorage.removeItem('HTG_SAVE_V1');
+                window.location.href = '../game/game.html?newGame=true&startRoom=living-room';
+            } else {
+                // 首次游戏，显示序章
+                window.location.href = '../prologue/prologue.html';
+            }
+        };
+        
+        document.getElementById('continueBtn').onclick = function() {
+            // 显示存档管理界面
+            MainSaveManager.showSaveManager();
+        };
+        
+        document.getElementById('prologueBtn').onclick = function() {
+            // 重看序章（临时重置序章状态）
+            localStorage.setItem('HTG_PROLOGUE_TEMP_REPLAY', 'true');
+            window.location.href = '../prologue/prologue.html';
+        };
+        
+        document.getElementById('achievementBtn').onclick = function() {
+            // 跳转到成就页面
+            window.location.href = '../achievement/achievement.html';
+        };
+        
+        document.getElementById('teamBtn').onclick = function() {
+            // 跳转到小组介绍页面
+            window.location.href = '../team/team.html';
+        };
+
+        // 关闭存档管理器
+        document.getElementById('close-save-manager').onclick = function() {
+            MainSaveManager.hideSaveManager();
+        };
+
+        // 点击背景关闭
+        document.getElementById('save-manager').onclick = function(e) {
+            if (e.target === this) {
+                MainSaveManager.hideSaveManager();
+            }
+        };
+    </script>
+</body>
+</html>

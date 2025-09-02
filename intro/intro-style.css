@@ -1,0 +1,65 @@
+body {
+    background-image: url("intro.jpg");
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    background-attachment:fixed;
+}
+.content-container {
+    position: relative;
+    z-index: 10;
+    max-width: 5xl;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 0.75rem 1rem;
+    background-color: #202324;
+    border-radius: 0.5rem;
+    color: #2d7ee1;
+    text-decoration: none;
+}
+.game-header {
+    margin-bottom: 3rem;
+    text-align: center;
+    color: #6a120c;
+}
+.game-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(163, 159, 159, 0.5);
+    margin-bottom: 1rem;
+    letter-spacing: -0.025em;
+}
+.title-underline {
+    width: 8rem;
+    height: 0.25rem;
+    background-color: #6a120c;
+    border-radius: 0.125rem;
+    margin: 0 auto;
+}
+.game-intro {
+    background-color: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.intro-text {
+    color: #F8FAFC;
+}
+.intro-paragraph {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+.page-footer {
+    margin-top: 10rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+}

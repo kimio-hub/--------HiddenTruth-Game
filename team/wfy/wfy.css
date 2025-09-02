@@ -1,0 +1,48 @@
+#intro{
+    text-align: center;
+    font-family: "微软雅黑";
+    font-size: 60px;
+    color: #eaeadc;   
+}
+p{
+    text-align: center;
+    font-family: "宋体";
+    font-size: 25px;
+    font-weight: 700;
+    color: #FFFFCC;   
+}
+.banner{
+    width: 250px;
+    height: 350px;
+}
+body{
+    background-image: url("image/img2.jpg");
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    background-attachment:fixed;
+}
+h1{
+    font-family: "微软雅黑";
+    font-size: 40px;
+    text-align: center;
+    color: #FFFFCC;   
+}
+ .container {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+.text-box {
+    flex: 1;
+}
+.back-button {
+    margin: 0;
+    color: #74dbed;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 500;
+}
+

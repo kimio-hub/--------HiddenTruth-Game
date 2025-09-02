@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+.main-bg {
+    position: fixed;
+    inset: 0;
+    background: url('../assets/image/0001.jpg') center/cover no-repeat;
+    opacity: 0.35;
+    filter: blur(2px);
+    z-index: 0;
+}
+
+.achievement-bg {
+    position: fixed;
+    inset: 0;
+    background: url('../assets/image/0008.jpg') center/cover no-repeat;
+    opacity: 0.35;
+    filter: blur(2px);
+    z-index: 0;
+}
+.main-container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.main-title {
+    font-size: 3rem;
+    color: #fff;
+    font-family: Georgia, serif;
+    text-shadow: 2px 2px 8px #0008;
+    margin-bottom: 0.5rem;
+}
+.main-subtitle {
+    color: #e94560;
+    font-size: 1.1rem;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+}
+.menu-btn {
+    width: 260px;
+    padding: 1rem 0;
+    background: linear-gradient(90deg, #e94560 0%, #1a1a2e 100%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 2rem;
+    box-shadow: 0 6px 24px rgba(233,69,96,0.18);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.menu-btn:hover {
+    background: linear-gradient(90deg, #e94560 60%, #fbb1b1 100%);
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(233,69,96,0.25);
+}

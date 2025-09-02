@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.back-button {
+    margin: 0;
+    color: #74dbed;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 500;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background: url('../assets/image/0007.jpg') center/cover no-repeat;
+ color: #333;
+}
+header {
+    margin-bottom: 30px;
+}
+.page-title {
+    text-align: center;
+    margin: 30px 0 40px;
+    color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 700;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #3498db;
+    display: inline-block;
+    width: 100%;
+}
+
+.container.member {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.row:first-of-type {
+    justify-content: space-around;
+}
+
+.row:last-of-type {
+    justify-content: center;
+    gap: 120px;
+}
+
+.member-card {
+    text-align: center;
+    flex: 0 0 auto;
+    width: 250px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.member-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.member-card img {
+    width: 100%;
+    max-width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    border: 5px solid #f1f1f1;
+}
+
+.member-info {
+    padding: 10px 0;
+}
+
+.member-name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.member-role {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
