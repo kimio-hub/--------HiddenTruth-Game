@@ -2,7 +2,7 @@
 const InventoryManager = (() => {
   const inventoryPanel = document.getElementById('inventory-panel');
   const inventorySlots = document.getElementById('inventory-slots');
-  const toggleBtn = document.getElementById('toggle-inventory');
+  const toggleBtn = document.getElementById('inventory-toggle');
   const itemDetailModal = document.getElementById('item-detail-modal');
   
   let isExpanded = false;
@@ -36,16 +36,59 @@ const InventoryManager = (() => {
   };
 
   function initialize() {
-    if (!inventoryPanel || !inventorySlots || !toggleBtn) {
+    console.log('InventoryManager: 开始初始化');
+    console.log('inventoryPanel:', inventoryPanel);
+    console.log('inventorySlots:', inventorySlots);
+    console.log('toggleBtn:', toggleBtn);
+    
+    if (!inventoryPanel || !inventorySlots) {
       console.error('InventoryManager: 必要的DOM元素未找到');
       return false;
     }
 
-    // 切换道具栏显示状态
-    toggleBtn.addEventListener('click', toggleInventory);
+    // 设置初始状态为收缩
+    inventoryPanel.classList.add('collapsed');
+    inventoryPanel.classList.remove('expanded');
+
+    // 为整个道具栏面板添加点击事件
+    inventoryPanel.addEventListener('click', function(e) {
+      console.log('道具栏面板被点击', e.target);
+      // 如果点击的是道具槽位内容，不触发toggle
+      if (e.target.closest('.inventory-slots')) {
+        console.log('点击的是道具槽位，不触发toggle');
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      toggleInventory();
+    });
+
+    // 切换道具栏展开/收缩状态
+    const inventoryHeader = document.querySelector('.inventory-header');
+    console.log('inventoryHeader:', inventoryHeader);
+    if (inventoryHeader) {
+      inventoryHeader.addEventListener('click', function(e) {
+        console.log('道具栏标题被点击');
+        e.preventDefault();
+        e.stopPropagation();
+        toggleInventory();
+      });
+    }
+    
+    // 也为toggle按钮单独添加事件监听
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function(e) {
+        console.log('toggle按钮被点击');
+        e.preventDefault();
+        e.stopPropagation();
+        toggleInventory();
+      });
+    }
     
     // 监听状态变化
-    Store.addEventListener(EVENT_TYPES.ITEM_COLLECTED, handleItemCollected);
+    if (typeof Store !== 'undefined' && typeof EVENT_TYPES !== 'undefined') {
+      Store.addEventListener(EVENT_TYPES.ITEM_COLLECTED, handleItemCollected);
+    }
     
     // 点击道具显示详情
     inventorySlots.addEventListener('click', handleItemClick);
@@ -66,13 +109,33 @@ const InventoryManager = (() => {
     }
 
     updateInventoryDisplay();
+    console.log('InventoryManager: 初始化完成');
     return true;
   }
 
   function toggleInventory() {
+    console.log('toggleInventory被调用，当前状态:', isExpanded);
     isExpanded = !isExpanded;
-    inventoryPanel.classList.toggle('expanded', isExpanded);
-    toggleBtn.textContent = isExpanded ? '📦' : '📦';
+    console.log('新状态:', isExpanded);
+    
+    if (isExpanded) {
+      inventoryPanel.classList.remove('collapsed');
+      inventoryPanel.classList.add('expanded');
+      console.log('设置为展开状态');
+    } else {
+      inventoryPanel.classList.remove('expanded');
+      inventoryPanel.classList.add('collapsed');
+      console.log('设置为收缩状态');
+    }
+    
+    // 更新按钮图标
+    const toggleIcon = document.querySelector('.inventory-toggle');
+    if (toggleIcon) {
+      toggleIcon.textContent = isExpanded ? '🔽' : '📦';
+      console.log('图标更新为:', toggleIcon.textContent);
+    } else {
+      console.error('找不到toggle图标元素');
+    }
   }
 
   function handleItemCollected(eventData) {
@@ -82,13 +145,15 @@ const InventoryManager = (() => {
   }
 
   function updateInventoryDisplay() {
-    const gameState = Store.getState();
+    if (!inventorySlots) return;
+    
+    const gameState = typeof Store !== 'undefined' ? Store.getState() : { inventory: [] };
     const inventory = gameState.inventory || [];
     
     inventorySlots.innerHTML = '';
     
-    // 创建道具槽位（固定5个槽位）
-    for (let i = 0; i < 5; i++) {
+    // 创建道具槽位（12个槽位，4x3网格）
+    for (let i = 0; i < 12; i++) {
       const slot = document.createElement('div');
       slot.className = 'inventory-slot';
       
@@ -170,22 +235,34 @@ const InventoryManager = (() => {
   }
 
   function addItem(itemId) {
-    const gameState = Store.getState();
-    if (!gameState.inventory.includes(itemId)) {
-      Store.updateInventory(itemId);
+    if (typeof Store !== 'undefined') {
+      const gameState = Store.getState();
+      if (!gameState.inventory.includes(itemId)) {
+        Store.updateInventory(itemId);
+      }
     }
   }
 
   function removeItem(itemId) {
-    const gameState = Store.getState();
-    const newInventory = gameState.inventory.filter(item => item !== itemId);
-    Store.setState({ inventory: newInventory });
-    updateInventoryDisplay();
+    if (typeof Store !== 'undefined') {
+      const gameState = Store.getState();
+      const newInventory = gameState.inventory.filter(item => item !== itemId);
+      Store.setState({ inventory: newInventory });
+      updateInventoryDisplay();
+    }
   }
 
   function hasItem(itemId) {
-    const gameState = Store.getState();
-    return gameState.inventory.includes(itemId);
+    if (typeof Store !== 'undefined') {
+      const gameState = Store.getState();
+      return gameState.inventory.includes(itemId);
+    }
+    return false;
+  }
+
+  function showTip(message) {
+    // 简单的提示显示函数
+    console.log('提示:', message);
   }
 
   return {

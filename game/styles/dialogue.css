@@ -1,0 +1,153 @@
+/* ========================================
+   对话系统样式
+======================================== */
+
+/* 对话容器 */
+#dialogue-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 对话框主体 */
+.dialogue-box {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    display: none;
+    z-index: 25;
+    max-height: 200px;
+    overflow-y: auto;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.dialogue-box.show {
+    display: block;
+    animation: slideInUp 0.3s ease;
+}
+
+/* 说话者名称 */
+.dialogue-box .speaker {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+/* 对话文本 */
+.dialogue-box .text {
+    line-height: 1.6;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #f0f0f0;
+}
+
+/* 继续提示 */
+.dialogue-box .continue-hint {
+    text-align: right;
+    color: #888;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0;
+    animation: blink 1.5s infinite;
+}
+
+/* 对话选项 */
+.dialogue-options {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dialogue-option {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.dialogue-option:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateX(5px);
+}
+
+.dialogue-option:active {
+    transform: translateX(3px);
+}
+
+/* 提示文字样式 */
+#prompt {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(226, 29, 29, 0.7);
+    font-size: 16px;
+    text-align: center;
+    z-index: 15;
+    opacity: 0;
+    animation: pulse 2s infinite;
+}
+
+/* 对话动画 */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+/* 响应式对话框 */
+@media (max-width: 768px) {
+    .dialogue-box {
+        left: 10px;
+        right: 10px;
+        padding: 15px;
+        max-height: 180px;
+    }
+    
+    .dialogue-box .text {
+        font-size: 13px;
+    }
+    
+    .dialogue-option {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}

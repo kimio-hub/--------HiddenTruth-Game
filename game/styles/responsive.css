@@ -1,0 +1,337 @@
+/* ========================================
+   响应式设计
+======================================== */
+
+/* 移动设备 (0-768px) */
+@media (max-width: 768px) {
+    
+    /* 基础调整 */
+    body {
+        font-size: 14px;
+    }
+    
+    /* 游戏容器调整 */
+    #game-container {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none; /* 标准属性 */
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* 背景图片调整 */
+    .background-image {
+        object-position: center;
+    }
+    
+    /* 交互点调整 */
+    .interactable {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .door-label,
+    .search-label,
+    .examine-label {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+    
+    /* 对话框调整 */
+    .dialogue-box {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        padding: 15px;
+        max-height: 150px;
+    }
+    
+    .dialogue-box .speaker {
+        font-size: 14px;
+    }
+    
+    .dialogue-box .text {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    
+    .dialogue-box .continue-hint {
+        font-size: 11px;
+    }
+    
+    /* 提示调整 */
+    .interaction-prompt {
+        bottom: 15px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    #prompt {
+        bottom: 40px;
+        font-size: 14px;
+    }
+    
+    /* 设置按钮调整 */
+    #settings-btn {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    /* 设置菜单调整 */
+    .settings-content {
+        padding: 20px 25px;
+        margin: 0 10px;
+        min-width: unset;
+        max-width: 90vw;
+    }
+    
+    .settings-content h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    
+    .settings-content button {
+        font-size: 15px;
+        padding: 10px 15px;
+        margin: 10px 0;
+        min-width: unset;
+    }
+    
+    /* 玩家角色调整 */
+    #player-character {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* 道具栏调整 */
+    #inventory-panel {
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        max-height: 100px;
+    }
+    
+    .inventory-header {
+        padding: 6px 12px;
+    }
+    
+    .inventory-header span {
+        font-size: 14px;
+    }
+    
+    #toggle-inventory {
+        font-size: 16px;
+    }
+}
+
+/* 平板设备 (769px-1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    
+    /* 对话框调整 */
+    .dialogue-box {
+        left: 30px;
+        right: 30px;
+        max-height: 180px;
+    }
+    
+    /* 设置菜单调整 */
+    .settings-content {
+        padding: 25px 35px;
+        max-width: 500px;
+    }
+    
+    /* 存档界面调整 */
+    .save-load-content {
+        max-width: 550px;
+    }
+    
+    /* 道具栏调整 */
+    #inventory-panel {
+        left: 30px;
+        right: 30px;
+    }
+}
+
+/* 大屏设备 (1025px+) */
+@media (min-width: 1025px) {
+    
+    /* 对话框调整 */
+    .dialogue-box {
+        left: 50px;
+        right: 50px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    /* 存档界面调整 */
+    .save-load-content {
+        max-width: 700px;
+    }
+    
+    /* 道具栏调整 */
+    #inventory-panel {
+        left: 50px;
+        right: 50px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
+
+/* 超宽屏设备 (1440px+) */
+@media (min-width: 1440px) {
+    
+    /* 游戏容器调整 */
+    #game-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    /* 对话框调整 */
+    .dialogue-box {
+        max-width: 900px;
+    }
+    
+    /* 道具栏调整 */
+    #inventory-panel {
+        max-width: 900px;
+    }
+}
+
+/* 高分辨率屏幕 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    
+    /* 提升图片质量 */
+    .background-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    .player-sprite {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* 触摸设备特殊处理 */
+@media (hover: none) and (pointer: coarse) {
+    
+    /* 移除悬停效果，使用点击效果 */
+    .interactable:hover {
+        transform: none;
+        border-width: 2px;
+        box-shadow: none;
+    }
+    
+    .interactable:active {
+        transform: scale(0.95);
+        border-width: 3px;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    .save-slot:hover {
+        transform: none;
+    }
+    
+    .save-slot:active {
+        transform: translateX(5px);
+    }
+    
+    /* 按钮触摸调整 */
+    .btn:hover {
+        transform: none;
+    }
+    
+    .btn:active {
+        transform: scale(0.95);
+    }
+    
+    /* 设置按钮触摸调整 */
+    #settings-btn:hover {
+        transform: none;
+    }
+    
+    #settings-btn:active {
+        transform: scale(0.9);
+    }
+}
+
+/* 横屏模式调整 */
+@media (orientation: landscape) and (max-height: 500px) {
+    
+    /* 压缩界面元素 */
+    .dialogue-box {
+        max-height: 120px;
+        padding: 12px;
+    }
+    
+    .settings-content {
+        padding: 15px 20px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .settings-content h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .settings-content button {
+        padding: 8px 16px;
+        margin: 8px 0;
+        font-size: 14px;
+    }
+    
+    #inventory-panel {
+        max-height: 80px;
+    }
+    
+    .inventory-slot {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .item-icon {
+        font-size: 18px;
+    }
+    
+    .item-name {
+        font-size: 8px;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    #game-container,
+    #intro-screen,
+    #settings-menu,
+    .modal-overlay {
+        display: none !important;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    /* 已经是深色主题，无需额外调整 */
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

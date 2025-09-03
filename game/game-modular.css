@@ -1,0 +1,65 @@
+/* ========================================
+   游戏主样式文件 - 模块化版本
+   包含所有样式模块的引用
+======================================== */
+
+/* 导入所有样式模块 */
+@import url('./styles/base.css');
+@import url('./styles/animations.css');
+@import url('./styles/layout.css');
+@import url('./styles/interactions.css');
+@import url('./styles/dialogue.css');
+@import url('./styles/ui.css');
+@import url('./styles/save-system.css');
+@import url('./styles/player-inventory.css');
+@import url('./styles/responsive.css');
+
+/* ========================================
+   模块说明：
+   
+   base.css - 基础样式重置和全局设置
+   animations.css - 所有动画定义
+   layout.css - 游戏容器和布局
+   interactions.css - 交互系统样式
+   dialogue.css - 对话系统样式
+   ui.css - UI界面样式（设置菜单、按钮）
+   save-system.css - 存档系统样式
+   player-inventory.css - 玩家和道具系统
+   responsive.css - 响应式设计
+======================================== */
+
+/* 全局调整和覆盖 */
+:root {
+    --primary-color: #FFD700;
+    --secondary-color: rgba(255, 215, 0, 0.8);
+    --background-dark: rgba(0, 0, 0, 0.8);
+    --text-light: #ffffff;
+    --text-muted: #aaaaaa;
+    --border-color: rgba(255, 215, 0, 0.6);
+    --success-color: rgba(76, 175, 80, 0.8);
+    --danger-color: rgba(244, 67, 54, 0.8);
+    --info-color: rgba(33, 150, 243, 0.8);
+    --warning-color: rgba(255, 152, 0, 0.8);
+}
+
+/* 确保所有模块样式的正确加载顺序 */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+/* 确保游戏在各种设备上正确显示 */
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}

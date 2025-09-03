@@ -7,10 +7,23 @@ const Store = (() => {
     evidences: {}, // 存储发现的证据
     roomStates: {}, // 存储各房间的状态
     dialogueHistory: [], // 对话历史
+    // 新增的游戏状态
+    memoryFragments: [], // 记忆碎片状态
+    intuitionLevel: 100, // 侦探直感水平
+    investigationStartTime: null, // 调查开始时间
+    timeLimit: 15 * 60 * 1000, // 时间限制（毫秒）
+    timeWarnings: [], // 已触发的时间警告
+    timeManagerActive: false, // 时间管理器是否激活
+    hiddenEvidenceEnabled: false, // 是否启用隐藏证据搜索
+    currentEnding: null, // 当前结局
+    endingContext: null, // 结局上下文
+    gameCompleted: false, // 游戏是否完成
     gameProgress: {
       itemsCollected: 0,
       evidencesFound: 0,
-      roomsVisited: []
+      roomsVisited: [],
+      totalPlayTime: 0,
+      investigationTime: 0 // 调查用时
     }
   };
 

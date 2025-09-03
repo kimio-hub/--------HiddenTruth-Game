@@ -14,6 +14,23 @@
         <header class="main-header">
             <h1 class="main-title">隐藏的真相</h1>
             <p class="main-subtitle">侦探的世界，真相只属于有准备的人</p>
+            
+            <!-- 用户状态区域 -->
+            <div class="user-status">
+                <div class="user-info" id="userInfoDisplay" style="display: none;">
+                    <i class="fa fa-user-secret"></i>
+                    <span>欢迎回来，<strong id="userDisplayName">未知侦探</strong></span>
+                    <button class="logout-link" id="logoutFromMain">
+                        <i class="fa fa-sign-out"></i>
+                    </button>
+                </div>
+                <div class="login-prompt" id="loginPrompt">
+                    <button class="login-btn" id="loginBtn">
+                        <i class="fa fa-sign-in"></i>
+                        <span>登录/注册</span>
+                    </button>
+                </div>
+            </div>
         </header>
         <nav class="main-menu">
             <button class="menu-btn" id="newGameBtn">
@@ -50,9 +67,78 @@
         </div>
     </div>
     <script>
+        // 用户会话管理（简化版）
+        const UserSessionMain = {
+            SESSION_KEY: 'HTG_SESSION',
+            
+            checkSession() {
+                try {
+                    const session = localStorage.getItem(this.SESSION_KEY);
+                    if (!session) return null;
+                    
+                    const sessionData = JSON.parse(session);
+                    if (Date.now() > sessionData.expires) {
+                        localStorage.removeItem(this.SESSION_KEY);
+                        return null;
+                    }
+                    
+                    return sessionData;
+                } catch (error) {
+                    console.error('检查会话失败:', error);
+                    localStorage.removeItem(this.SESSION_KEY);
+                    return null;
+                }
+            },
+            
+            getCurrentUser() {
+                const session = this.checkSession();
+                if (!session) return null;
+                
+                try {
+                    const users = localStorage.getItem('HTG_USERS');
+                    if (!users) return null;
+                    
+                    const userData = JSON.parse(users);
+                    return userData[session.username] || null;
+                } catch (error) {
+                    console.error('获取用户信息失败:', error);
+                    return null;
+                }
+            },
+            
+            logout() {
+                try {
+                    localStorage.removeItem(this.SESSION_KEY);
+                    return true;
+                } catch (error) {
+                    console.error('登出失败:', error);
+                    return false;
+                }
+            },
+            
+            updateUserDisplay() {
+                const user = this.getCurrentUser();
+                const userInfoDisplay = document.getElementById('userInfoDisplay');
+                const loginPrompt = document.getElementById('loginPrompt');
+                const userDisplayName = document.getElementById('userDisplayName');
+                
+                if (user) {
+                    // 已登录状态
+                    userDisplayName.textContent = user.username;
+                    userInfoDisplay.style.display = 'flex';
+                    loginPrompt.style.display = 'none';
+                } else {
+                    // 未登录状态
+                    userInfoDisplay.style.display = 'none';
+                    loginPrompt.style.display = 'flex';
+                }
+            }
+        };
+        
         // 存档管理系统（简化版）
         const MainSaveManager = {
             SAVE_SLOTS_KEY: 'HTG_SAVE_SLOTS_V1',
+            USER_SAVES_KEY: 'HTG_USER_SAVES_V1',
             ROOM_NAMES: {
                 'entrance': '玄关',
                 'living-room': '客厅', 
@@ -63,9 +149,19 @@
                 'bathroom': '卫生间'
             },
 
+            // 获取当前用户的存档键
+            getUserSaveKey() {
+                const session = UserSessionMain.checkSession();
+                if (!session) {
+                    return this.SAVE_SLOTS_KEY; // 兼容旧版本
+                }
+                return `${this.USER_SAVES_KEY}_${session.username}`;
+            },
+
             getSaveSlots() {
                 try {
-                    const raw = localStorage.getItem(this.SAVE_SLOTS_KEY);
+                    const saveKey = this.getUserSaveKey();
+                    const raw = localStorage.getItem(saveKey);
                     return raw ? JSON.parse(raw) : {};
                 } catch {
                     return {};
@@ -90,14 +186,29 @@
             },
 
             deleteSlot(slotId) {
+                // 检查登录状态
+                if (!UserSessionMain.checkSession()) {
+                    alert('请先登录后再删除存档');
+                    return false;
+                }
+
                 const allSlots = this.getSaveSlots();
                 const saveData = allSlots[slotId];
                 
                 if (!saveData) return false;
+
+                // 验证存档所有者
+                const currentUser = UserSessionMain.getCurrentUser();
+                const currentUsername = currentUser ? currentUser.username : 'guest';
+                if (saveData.owner && saveData.owner !== currentUsername) {
+                    alert(`此存档属于用户 "${saveData.owner}"，无法删除`);
+                    return false;
+                }
                 
                 if (confirm(`确定要删除存档"${saveData.name}"吗？此操作不可恢复。`)) {
                     delete allSlots[slotId];
-                    localStorage.setItem(this.SAVE_SLOTS_KEY, JSON.stringify(allSlots));
+                    const saveKey = this.getUserSaveKey();
+                    localStorage.setItem(saveKey, JSON.stringify(allSlots));
                     return true;
                 }
                 return false;
@@ -120,6 +231,7 @@
                         </div>
                     `;
                 } else {
+                    const ownerDisplay = data.owner ? `存档所有者: ${data.owner}` : '';
                     return `
                         <div class="main-save-slot" data-slot-id="${slotId}">
                             <div class="main-slot-info">
@@ -127,6 +239,7 @@
                                 <div class="main-slot-time">${data.timestamp}</div>
                                 <div class="main-slot-location">位置：${data.roomName}</div>
                                 <div class="main-slot-progress">${data.progress}</div>
+                                ${ownerDisplay ? `<div class="main-slot-owner">${ownerDisplay}</div>` : ''}
                             </div>
                             <div class="main-slot-actions">
                                 <button class="main-continue-btn" data-action="continue" data-slot-id="${slotId}">继续游戏</button>
@@ -177,6 +290,26 @@
 
         // 页面加载时检查序章状态
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始化用户状态显示
+            UserSessionMain.updateUserDisplay();
+            
+            // 绑定登录按钮事件
+            document.getElementById('loginBtn').onclick = function() {
+                window.location.href = '../login/login.html';
+            };
+            
+            // 绑定登出按钮事件
+            document.getElementById('logoutFromMain').onclick = function() {
+                if (confirm('确定要退出登录吗？')) {
+                    if (UserSessionMain.logout()) {
+                        alert('已成功退出登录');
+                        UserSessionMain.updateUserDisplay();
+                    } else {
+                        alert('退出登录失败，请重试');
+                    }
+                }
+            };
+            
             const prologueCompleted = localStorage.getItem('HTG_PROLOGUE_COMPLETED');
             if (prologueCompleted === 'true') {
                 // 如果已完成序章，显示"重看序章"按钮

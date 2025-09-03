@@ -2,10 +2,21 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <title>游戏序幕</title>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="game.css">
+    <!-- 模块化CSS样式 - 直接引入 -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/interactions.css">
+    <link rel="stylesheet" href="styles/dialogue.css">
+    <link rel="stylesheet" href="styles/ui.css">
+    <link rel="stylesheet" href="styles/save-system.css">
+    <link rel="stylesheet" href="styles/player-inventory.css">
+    <link rel="stylesheet" href="styles/memory-system.css">
+    <link rel="stylesheet" href="styles/time-ending-system.css">
+    <link rel="stylesheet" href="styles/responsive.css">
 </head>
 <body>
     <div id="intro-screen">
@@ -15,7 +26,6 @@
     <div id="game-container">
         <div class="background-layer">
             <img src="../assets/image/dream.svg" class="background-image">
-            <div class="background-gradient"></div>
         </div>
         <div class="content-container">
             <div id="dialogue-container"></div>
@@ -43,14 +53,27 @@
         <!-- 设置按钮 -->
         <button id="settings-btn">⚙️</button>
 
+        <!-- 记忆碎片显示区域 -->
+        <div id="memory-fragments" style="display: none;">
+            <!-- 记忆碎片将通过 JavaScript 动态生成 -->
+        </div>
+
+        <!-- 直感水平指示器 -->
+        <div id="intuition-level-container" style="display: none;">
+            <div class="intuition-label">侦探的直感</div>
+            <div class="intuition-bar-container">
+                <div class="intuition-bar high" id="intuition-level"></div>
+            </div>
+        </div>
+
         <!-- 道具栏 -->
         <div id="inventory-panel">
             <div class="inventory-header">
                 <span>道具栏</span>
-                <button id="toggle-inventory">📦</button>
+                <div class="inventory-toggle" id="inventory-toggle">�</div>
             </div>
             <div id="inventory-slots" class="inventory-slots">
-                <!-- 道具将通过 JavaScript 动态生成 -->
+                <!-- 道具将通过 JavaScript 动态生成，4x3网格布局 -->
             </div>
         </div>
 
@@ -69,9 +92,30 @@
         <div id="settings-menu" style="display: none;">
             <div class="settings-content">
                 <h2>设置</h2>
+                
+                <!-- 用户信息区域 -->
+                <div class="user-info-section">
+                    <div class="user-welcome">
+                        <i class="fa fa-user-secret"></i>
+                        <span id="current-user-name">未登录</span>
+                    </div>
+                    <div class="user-stats">
+                        <small id="user-login-info">登录时间: --</small>
+                    </div>
+                </div>
+                
+                <div class="settings-divider"></div>
+                
                 <button id="quick-save-btn">快速保存</button>
                 <button id="save-menu-btn">存档管理</button>
                 <button id="load-menu-btn">读档管理</button>
+                
+                <div class="settings-divider"></div>
+                
+                <button id="logout-btn" class="logout-btn">
+                    <i class="fa fa-sign-out"></i>
+                    <span>退出登录</span>
+                </button>
                 <button id="return-to-menu-btn">返回主菜单</button>
                 <button id="close-settings-btn">关闭</button>
             </div>
@@ -113,9 +157,14 @@
     <script src="modules/constants.js"></script>
     <script src="modules/utils.js"></script>
     <script src="modules/store.js"></script>
+    <script src="modules/user-session.js"></script>
     <script src="modules/save-manager.js"></script>
     <script src="modules/save-ui.js"></script>
     <script src="modules/inventory.js"></script>
+    <script src="modules/memory-fragments.js"></script>
+    <script src="modules/detective-intuition.js"></script>
+    <script src="modules/time-manager.js"></script>
+    <script src="modules/ending-manager.js"></script>
     <script src="modules/scene-manager.js"></script>
     <script src="modules/main.js"></script>
 </body>

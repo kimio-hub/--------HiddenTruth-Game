@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>存档功能测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { margin: 10px; padding: 10px 20px; }
+        .test-section { margin: 20px 0; border: 1px solid #ccc; padding: 15px; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; max-height: 200px; overflow-y: scroll; }
+    </style>
+</head>
+<body>
+    <h1>存档功能测试</h1>
+    
+    <div class="test-section">
+        <h3>基础测试</h3>
+        <button onclick="testSaveManager()">测试SaveManager模块</button>
+        <button onclick="testLocalStorage()">测试localStorage</button>
+        <button onclick="clearStorage()">清空所有存档</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>存档操作</h3>
+        <button onclick="testSave()">测试保存存档</button>
+        <button onclick="testLoad()">测试读取存档</button>
+        <button onclick="listAllSlots()">显示所有存档槽</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>测试日志</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        // 引入游戏的Store模块（简化版）
+        const Store = (() => {
+            let data = {
+                phase: 'investigation',
+                currentRoom: 'living-room',
+                inventory: ['bloodknife'],
+                evidences: { 'evidence1': true },
+                roomStates: {}
+            };
+            
+            return {
+                getState: () => data,
+                setState: (newData) => { data = { ...data, ...newData }; }
+            };
+        })();
+
+        // 房间名称映射
+        const ROOM_NAMES = {
+            'entrance': '玄关',
+            'living-room': '客厅', 
+            'kitchen': '厨房',
+            'study': '书房',
+            'bedroom': '卧室',
+            'balcony': '阳台',
+            'bathroom': '卫生间'
+        };
+
+        // 简化版SaveManager
+        const SaveManager = (() => {
+            const SAVE_SLOTS_KEY = 'HTG_SAVE_SLOTS_V1';
+            const MAX_SAVE_SLOTS = 5;
+
+            function getSaveSlots() {
+                try {
+                    const raw = localStorage.getItem(SAVE_SLOTS_KEY);
+                    return raw ? JSON.parse(raw) : {};
+                } catch {
+                    return {};
+                }
+            }
+
+            function saveToSlot(slotId, customName) {
+                const currentState = Store.getState();
+                const saveData = {
+                    id: slotId,
+                    name: customName || `存档${slotId.split('_')[1]}`,
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    roomName: ROOM_NAMES[currentState.currentRoom] || currentState.currentRoom,
+                    progress: getSaveProgress(currentState),
+                    gameState: currentState
+                };
+                
+                const allSlots = getSaveSlots();
+                allSlots[slotId] = saveData;
+                
+                try {
+                    localStorage.setItem(SAVE_SLOTS_KEY, JSON.stringify(allSlots));
+                    log(`已保存到 ${saveData.name}`);
+                    return true;
+                } catch (error) {
+                    log('保存失败：' + error.message);
+                    return false;
+                }
+            }
+
+            function getAllSlotData() {
+                const allSlots = getSaveSlots();
+                const result = [];
+                
+                for (let i = 1; i <= MAX_SAVE_SLOTS; i++) {
+                    const slotId = `slot_${i}`;
+                    const saveData = allSlots[slotId];
+                    result.push({
+                        slotId,
+                        isEmpty: !saveData,
+                        data: saveData || null
+                    });
+                }
+                
+                return result;
+            }
+
+            function getSaveProgress(gameState) {
+                const totalItems = 3;
+                const collectedItems = gameState.inventory?.length || 0;
+                const totalEvidence = Object.keys(gameState.evidences || {}).length;
+                
+                return `道具 ${collectedItems}/${totalItems} • 线索 ${totalEvidence}个`;
+            }
+
+            return {
+                saveToSlot,
+                getAllSlotData,
+                getSaveSlots
+            };
+        })();
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${time}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function testSaveManager() {
+            log('测试SaveManager模块...');
+            try {
+                const allSlots = SaveManager.getAllSlotData();
+                log(`SaveManager.getAllSlotData() 返回: ${JSON.stringify(allSlots, null, 2)}`);
+                log('SaveManager模块测试成功');
+            } catch (error) {
+                log(`SaveManager模块测试失败: ${error.message}`);
+            }
+        }
+
+        function testLocalStorage() {
+            log('测试localStorage...');
+            try {
+                localStorage.setItem('test', 'value');
+                const value = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                log(`localStorage测试成功: ${value}`);
+            } catch (error) {
+                log(`localStorage测试失败: ${error.message}`);
+            }
+        }
+
+        function clearStorage() {
+            localStorage.removeItem('HTG_SAVE_SLOTS_V1');
+            log('已清空所有存档');
+        }
+
+        function testSave() {
+            log('测试保存存档...');
+            const result = SaveManager.saveToSlot('slot_1', '测试存档');
+            log(`保存结果: ${result}`);
+        }
+
+        function testLoad() {
+            log('测试读取存档...');
+            const slots = SaveManager.getSaveSlots();
+            log(`所有存档: ${JSON.stringify(slots, null, 2)}`);
+        }
+
+        function listAllSlots() {
+            log('显示所有存档槽...');
+            const allSlots = SaveManager.getAllSlotData();
+            allSlots.forEach(slot => {
+                log(`槽位 ${slot.slotId}: ${slot.isEmpty ? '空' : slot.data.name}`);
+            });
+        }
+
+        // 页面加载时的初始测试
+        window.onload = function() {
+            log('页面加载完成，开始测试...');
+            testSaveManager();
+        };
+    </script>
+</body>
+</html>

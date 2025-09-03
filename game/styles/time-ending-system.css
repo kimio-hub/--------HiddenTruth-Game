@@ -1,0 +1,457 @@
+/* 时间管理和结局系统相关样式 */
+
+/* 时间显示器 */
+#time-display {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  z-index: 95;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 215, 0, 0.7);
+  border-radius: 10px;
+  padding: 10px 15px;
+  color: white;
+  font-family: 'Courier New', monospace;
+}
+
+.time-container {
+  text-align: center;
+  min-width: 120px;
+}
+
+.time-label {
+  font-size: 12px;
+  color: #FFD700;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.time-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.time-bar-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.time-bar {
+  height: 100%;
+  transition: width 0.5s ease, background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.time-bar.normal {
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+.time-bar.warning {
+  background: linear-gradient(90deg, #FF9800, #FFC107);
+}
+
+.time-bar.critical {
+  background: linear-gradient(90deg, #F44336, #FF5722);
+  animation: timeCritical 1s infinite;
+}
+
+@keyframes timeCritical {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* 时间警告提示 */
+.time-warning {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #FF9800;
+  border-radius: 15px;
+  padding: 20px 30px;
+  color: white;
+  z-index: 1000;
+  opacity: 0;
+  scale: 0.8;
+  transition: all 0.5s ease;
+}
+
+.time-warning.show {
+  opacity: 1;
+  scale: 1;
+}
+
+.time-warning.warning-medium {
+  border-color: #FF9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.time-warning.warning-high {
+  border-color: #FF5722;
+  background: rgba(255, 87, 34, 0.1);
+  animation: warningPulse 1s infinite;
+}
+
+.time-warning.warning-critical {
+  border-color: #F44336;
+  background: rgba(244, 67, 54, 0.1);
+  animation: criticalPulse 0.5s infinite;
+}
+
+.warning-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.warning-icon {
+  font-size: 32px;
+  animation: warningBounce 1s infinite;
+}
+
+.warning-text {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+@keyframes warningPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 87, 34, 0.5); }
+  50% { box-shadow: 0 0 25px rgba(255, 87, 34, 0.8); }
+}
+
+@keyframes criticalPulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(244, 67, 54, 0.8);
+    transform: translateX(-50%) scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(244, 67, 54, 1);
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes warningBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 时间到期消息 */
+.time-up-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.time-up-message.show {
+  opacity: 1;
+}
+
+.time-up-message .message-content {
+  background: rgba(20, 20, 20, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  border: 3px solid #F44336;
+  color: white;
+  text-align: center;
+  max-width: 500px;
+  animation: timeUpSlideIn 0.8s ease-out;
+}
+
+.time-up-message h2 {
+  color: #F44336;
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+.time-up-message p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+@keyframes timeUpSlideIn {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 结局选择模态框 */
+.ending-choice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.ending-choice-modal.show {
+  opacity: 1;
+}
+
+.choice-content {
+  background: rgba(20, 20, 20, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  border: 2px solid #FFD700;
+  color: white;
+  text-align: center;
+  max-width: 600px;
+  animation: choiceSlideIn 0.6s ease-out;
+}
+
+.choice-content h2 {
+  color: #FFD700;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.choice-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.choice-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.choice-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.choice-btn.primary {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+}
+
+.choice-btn.primary:hover {
+  background: linear-gradient(45deg, #FFA500, #FF8C00);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.choice-btn.secondary {
+  background: rgba(128, 128, 128, 0.3);
+  color: white;
+  border: 2px solid #888;
+}
+
+.choice-btn.secondary:hover {
+  background: rgba(128, 128, 128, 0.5);
+  border-color: #aaa;
+  transform: translateY(-2px);
+}
+
+@keyframes choiceSlideIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 结局画面 */
+.ending-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 40, 0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1003;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.ending-screen.show {
+  opacity: 1;
+}
+
+.ending-content {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 50px;
+  border-radius: 25px;
+  border: 3px solid #FFD700;
+  color: white;
+  text-align: center;
+  max-width: 700px;
+  animation: endingFadeIn 1.5s ease-out;
+  backdrop-filter: blur(10px);
+}
+
+.ending-header {
+  margin-bottom: 30px;
+}
+
+.ending-title {
+  font-size: 36px;
+  color: #FFD700;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.ending-subtitle {
+  font-size: 18px;
+  color: #ccc;
+  font-style: italic;
+}
+
+.ending-description {
+  margin-bottom: 30px;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.ending-details {
+  color: #FFD700;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+.ending-stats {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.stat-label {
+  color: #ccc;
+}
+
+.stat-value {
+  color: #FFD700;
+  font-weight: bold;
+}
+
+.ending-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ending-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.ending-btn.primary {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+}
+
+.ending-btn.secondary {
+  background: rgba(128, 128, 128, 0.3);
+  color: white;
+  border: 2px solid #888;
+}
+
+.ending-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes endingFadeIn {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 特殊消息样式 */
+.special-message {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #4CAF50;
+  border-radius: 15px;
+  padding: 20px 30px;
+  color: white;
+  z-index: 1000;
+  opacity: 0;
+  scale: 0.8;
+  transition: all 0.5s ease;
+}
+
+.special-message.show {
+  opacity: 1;
+  scale: 1;
+}
+
+.special-message .message-content h3 {
+  color: #4CAF50;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.special-message .message-content p {
+  line-height: 1.6;
+  margin: 0;
+}

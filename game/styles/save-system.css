@@ -1,0 +1,265 @@
+/* ========================================
+   存档系统样式
+======================================== */
+
+/* 模态覆盖层 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 105;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+/* 存档读档内容区域 */
+.save-load-content {
+    background: rgba(15, 15, 15, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.8);
+    color: #fff;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: bounceIn 0.4s ease-out;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.save-load-content h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 存档槽位列表 */
+.slots-list {
+    margin-bottom: 20px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/* 单个存档槽位 */
+.save-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+
+.save-slot:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateX(5px);
+}
+
+.save-slot.empty {
+    border-style: dashed;
+    opacity: 0.7;
+    background: rgba(40, 40, 40, 0.3);
+}
+
+.save-slot.empty:hover {
+    opacity: 1;
+    background: rgba(60, 60, 60, 0.5);
+}
+
+/* 存档信息区域 */
+.slot-info {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.slot-info h4 {
+    color: #FFD700;
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.slot-info .slot-time {
+    color: #aaa;
+    font-size: 13px;
+    margin: 2px 0;
+}
+
+.slot-info .slot-location {
+    color: #98FB98;
+    font-size: 14px;
+    margin: 3px 0;
+}
+
+.slot-info .slot-progress {
+    color: #87CEEB;
+    font-size: 12px;
+    margin: 3px 0;
+}
+
+.slot-info .slot-timer {
+    color: #FFD700;
+    font-size: 12px;
+    margin: 3px 0;
+    font-weight: bold;
+}
+
+.slot-info .slot-owner {
+    color: #98FB98;
+    font-size: 11px;
+    margin: 3px 0;
+    font-style: italic;
+}
+
+/* 存档操作按钮区域 */
+.slot-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 120px;
+}
+
+.slot-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+/* 不同类型的操作按钮 */
+.save-here-btn,
+.overwrite-btn {
+    background: rgba(76, 175, 80, 0.8);
+    color: #fff;
+}
+
+.save-here-btn:hover,
+.overwrite-btn:hover {
+    background: rgba(76, 175, 80, 1);
+    transform: scale(1.05);
+}
+
+.load-btn {
+    background: rgba(33, 150, 243, 0.8);
+    color: #fff;
+}
+
+.load-btn:hover {
+    background: rgba(33, 150, 243, 1);
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background: rgba(244, 67, 54, 0.8);
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background: rgba(244, 67, 54, 1);
+    transform: scale(1.05);
+}
+
+/* 菜单操作区域 */
+.menu-actions {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.close-btn {
+    background: rgba(100, 100, 100, 0.7);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.close-btn:hover {
+    background: rgba(150, 150, 150, 0.8);
+    transform: scale(1.05);
+}
+
+/* 空槽位样式 */
+.save-slot.empty .slot-info h4 {
+    color: #888;
+}
+
+.save-slot.empty .slot-actions button:disabled {
+    background: rgba(100, 100, 100, 0.3);
+    color: #666;
+    cursor: not-allowed;
+}
+
+.save-slot.empty .slot-actions button:disabled:hover {
+    transform: none;
+    background: rgba(100, 100, 100, 0.3);
+}
+
+/* 存档状态指示器 */
+.slot-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(76, 175, 80, 0.8);
+}
+
+.save-slot.empty .slot-status {
+    background: rgba(158, 158, 158, 0.5);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .save-load-content {
+        padding: 20px;
+        width: 95%;
+        max-height: 85vh;
+    }
+    
+    .save-slot {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .slot-info {
+        margin-right: 0;
+        text-align: center;
+    }
+    
+    .slot-actions {
+        flex-direction: row;
+        justify-content: center;
+        min-width: unset;
+    }
+    
+    .slot-actions button {
+        flex: 1;
+        max-width: 100px;
+    }
+}

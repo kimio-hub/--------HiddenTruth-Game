@@ -1,0 +1,284 @@
+/* ========================================
+   UI界面样式（设置菜单、按钮等）
+======================================== */
+
+/* 设置按钮 */
+#settings-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+#settings-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1) rotate(90deg);
+    border-color: rgba(255, 215, 0, 0.8);
+}
+
+/* 设置菜单覆盖层 */
+#settings-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 101;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+/* 设置菜单内容 */
+.settings-content {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    color: #fff;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease-out;
+}
+
+/* 用户信息区域 */
+.user-info-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFD700;
+    margin-bottom: 5px;
+}
+
+.user-welcome i {
+    font-size: 18px;
+}
+
+.user-stats {
+    color: #ccc;
+    font-size: 12px;
+}
+
+/* 设置分割线 */
+.settings-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 15px 0;
+}
+
+.settings-content h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #FFD700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+/* 设置菜单按钮 */
+.settings-content button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 15px 0;
+    background: rgba(255, 215, 0, 0.8);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 200px;
+    font-family: inherit;
+}
+
+.settings-content button:hover {
+    background: #FFD700;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.settings-content button:active {
+    transform: scale(1.02);
+}
+
+/* 特殊按钮样式 */
+#close-settings-btn {
+    background: rgba(100, 100, 100, 0.7) !important;
+    color: #fff !important;
+}
+
+#close-settings-btn:hover {
+    background: rgba(150, 150, 150, 0.8) !important;
+    color: #fff !important;
+}
+
+#quick-save-btn {
+    background: rgba(76, 175, 80, 0.8) !important;
+    color: #fff !important;
+}
+
+#quick-save-btn:hover {
+    background: rgba(76, 175, 80, 1) !important;
+}
+
+#return-to-menu-btn {
+    background: rgba(244, 67, 54, 0.8) !important;
+    color: #fff !important;
+}
+
+#return-to-menu-btn:hover {
+    background: rgba(244, 67, 54, 1) !important;
+}
+
+/* 登出按钮样式 */
+.logout-btn {
+    background: rgba(255, 87, 34, 0.8) !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 87, 34, 1) !important;
+    transform: scale(1.05) !important;
+}
+
+.logout-btn i {
+    font-size: 16px;
+}
+
+/* 通用按钮样式 */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: rgba(255, 215, 0, 0.8);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #FFD700;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: rgba(100, 100, 100, 0.7);
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: rgba(150, 150, 150, 0.8);
+}
+
+.btn-success {
+    background: rgba(76, 175, 80, 0.8);
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: rgba(76, 175, 80, 1);
+}
+
+.btn-danger {
+    background: rgba(244, 67, 54, 0.8);
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: rgba(244, 67, 54, 1);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+    transform: none;
+}
+
+/* 菜单动画 */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    #settings-btn {
+        top: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .settings-content {
+        padding: 25px 30px;
+        margin: 0 10px;
+        min-width: unset;
+    }
+    
+    .settings-content h2 {
+        font-size: 24px;
+    }
+    
+    .settings-content button {
+        font-size: 16px;
+        padding: 10px 16px;
+        min-width: unset;
+    }
+}

@@ -33,13 +33,19 @@ const SaveLoadUI = (() => {
         </div>
       `;
     } else {
+      const timeStatus = SaveManager.getTimeStatusForSave ? SaveManager.getTimeStatusForSave(data.gameState) : null;
+      const timeDisplay = timeStatus ? `调查时间: ${timeStatus.timeRemaining}` : '';
+      const ownerDisplay = data.owner ? `存档所有者: ${data.owner}` : '';
+      
       return `
         <div class="save-slot" data-slot-id="${slotId}">
           <div class="slot-info">
             <h4>${data.name}</h4>
-            <div class="slot-time">${data.timestamp}</div>
-            <div class="slot-location">位置：${data.roomName}</div>
-            <div class="slot-progress">${data.progress}</div>
+            <div class="slot-time">${new Date(data.timestamp).toLocaleString()}</div>
+            <div class="slot-location">位置：${data.gameState.currentRoom || '未知位置'}</div>
+            <div class="slot-progress">${SaveManager.getSaveProgress ? SaveManager.getSaveProgress(data.gameState) : '进度未知'}</div>
+            ${timeDisplay ? `<div class="slot-timer">${timeDisplay}</div>` : ''}
+            ${ownerDisplay ? `<div class="slot-owner">${ownerDisplay}</div>` : ''}
           </div>
           <div class="slot-actions">
             <button class="overwrite-btn" data-action="overwrite" data-slot-id="${slotId}">覆盖</button>
@@ -67,13 +73,19 @@ const SaveLoadUI = (() => {
         </div>
       `;
     } else {
+      const timeStatus = SaveManager.getTimeStatusForSave ? SaveManager.getTimeStatusForSave(data.gameState) : null;
+      const timeDisplay = timeStatus ? `调查时间: ${timeStatus.timeRemaining}` : '';
+      const ownerDisplay = data.owner ? `存档所有者: ${data.owner}` : '';
+      
       return `
         <div class="save-slot" data-slot-id="${slotId}">
           <div class="slot-info">
             <h4>${data.name}</h4>
-            <div class="slot-time">${data.timestamp}</div>
-            <div class="slot-location">位置：${data.roomName}</div>
-            <div class="slot-progress">${data.progress}</div>
+            <div class="slot-time">${new Date(data.timestamp).toLocaleString()}</div>
+            <div class="slot-location">位置：${data.gameState.currentRoom || '未知位置'}</div>
+            <div class="slot-progress">${SaveManager.getSaveProgress ? SaveManager.getSaveProgress(data.gameState) : '进度未知'}</div>
+            ${timeDisplay ? `<div class="slot-timer">${timeDisplay}</div>` : ''}
+            ${ownerDisplay ? `<div class="slot-owner">${ownerDisplay}</div>` : ''}
           </div>
           <div class="slot-actions">
             <button class="load-btn" data-action="load" data-slot-id="${slotId}">读取</button>

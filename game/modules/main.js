@@ -248,6 +248,19 @@ const GameActions = (() => {
   };
 })();
 
+// -------- 物品栏显示切换功能 --------
+function initializeInventoryToggle() {
+  const inventoryPanel = document.getElementById('inventory-panel');
+  
+  if (!inventoryPanel) return;
+  
+  // 设置初始显示状态和收缩状态
+  inventoryPanel.style.display = 'none';
+  
+  // 注意：展开/收缩功能现在由 InventoryManager 处理
+  // 这个函数现在只负责整个道具栏的显示/隐藏
+}
+
 // -------- 设置菜单管理 --------
 function setupSettingsMenu() {
   const settingsBtn = document.getElementById('settings-btn');
@@ -372,6 +385,27 @@ function startInvestigation() {
   const state = Store.getState();
   const initialRoom = state.currentRoom || 'living-room';
   
+  // 显示玩家和道具栏
+  const player = document.getElementById('player-character');
+  const inventory = document.getElementById('inventory-panel');
+  const memoryFragments = document.getElementById('memory-fragments');
+  const intuitionLevel = document.getElementById('intuition-level-container');
+  
+  if (player) {
+    player.classList.add('show');
+    player.style.display = 'block';
+  }
+  if (inventory) {
+    inventory.classList.add('show', 'collapsed'); // 显示且为收缩状态
+    inventory.style.display = 'block';
+  }
+  if (memoryFragments) {
+    memoryFragments.style.display = 'flex';
+  }
+  if (intuitionLevel) {
+    intuitionLevel.style.display = 'block';
+  }
+
   // 渲染初始房间
   SceneManager.renderRoom(initialRoom);
   
@@ -380,15 +414,28 @@ function startInvestigation() {
   if (introScreen) {
     introScreen.style.display = 'none';
   }
+  
+  // 启动时间管理系统
+  TimeManager.startInvestigation();
 }
 
 // -------- 事件监听器设置 --------
 document.addEventListener('DOMContentLoaded', function() {
+  // 初始化用户会话管理
+  UserSession.init();
+  
   // 初始化所有模块
   PlayerController.initialize();
   InventoryManager.initialize();
+  MemoryFragmentManager.initialize();
+  DetectiveIntuition.initialize();
+  TimeManager.initialize();
+  EndingManager.initialize();
   SaveLoadUI.initialize();
   setupSettingsMenu();
+  
+  // 注释掉重复的初始化，避免冲突
+  // initializeInventoryToggle();
   
   // 初始化游戏
   initializeGame();
